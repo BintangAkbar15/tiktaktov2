@@ -1,3 +1,4 @@
+// initialization
 const cells = document.querySelectorAll(".cell");
 const statusText = document.querySelector("#statusText");
 const restartBtn = document.querySelector("#restartBtn");
@@ -27,6 +28,7 @@ let vsBot = true;
 let turnCount = 0;
 let timerInterval = null
  
+// watcher radio change
 modeRadios.forEach(radio => {
     radio.addEventListener("change", () => {
         vsBot = document.querySelector('input[name="gameMode"]:checked')?.value === "bot";
@@ -43,10 +45,12 @@ modeRadios.forEach(radio => {
     });
 });
 
+// button events
 startBtn.addEventListener("click", initializeGame);
 restartBtn.addEventListener("click", restartGame);
 resetBtn.addEventListener("click", resetGame);
 
+// game initialization
 function initializeGame() {
     gameMode.classList.add('d-none')
     resetBtn.classList.add('d-none')
@@ -66,14 +70,14 @@ function initializeGame() {
     statusText.style.color = "red";
     historyLog.innerHTML = "";
 
+    // initialization each cell
     cells.forEach((cell, index) => {
         cell.textContent = "";
         cell.classList.remove("text-muted", "win");
         cell.setAttribute("cellIndex", index);
-        cell.removeEventListener("click", cellClicked);
         cell.addEventListener("click", cellClicked);
     });
-    
+    // clear timer interval & timeout and set the turn timer
     clearInterval(timerInterval)
     clearTimeout(turnTimeout)
     startTurnTimer();
@@ -83,7 +87,9 @@ function initializeGame() {
     }
 }
 
-function cellClicked() {
+// cell click function
+function cellClicked(e) {
+    console.log(e)
     const index = this.getAttribute("cellIndex");
 
     if (options[index] !== "" || !running || (vsBot && currentPlayer === "O")) return;
@@ -92,6 +98,7 @@ function cellClicked() {
     checkWinner();
 }
 
+// update cell function
 function updateCell(cell, index) {
     options[index] = currentPlayer;
     cell.textContent = currentPlayer;
@@ -114,6 +121,7 @@ function updateCell(cell, index) {
     }
 }
 
+// change player function
 function changePlayer() {
     currentPlayer = currentPlayer === "X" ? "O" : "X";
     statusText.textContent = `${currentPlayer}'s Turn`;
@@ -126,6 +134,7 @@ function changePlayer() {
     }
 }
 
+// check winner condition
 function checkWinner() {
     let roundWon = false;
     let winningCombo = [];
@@ -139,6 +148,7 @@ function checkWinner() {
         }
     }
 
+    // clear timeout untuk reset waktu
     clearTimeout(turnTimeout);
 
     if (roundWon) {
@@ -183,6 +193,7 @@ function checkWinner() {
     changePlayer();
 }
 
+// restart game fuction
 function restartGame() {
     gameMode.classList.remove('d-none')
     resetBtn.classList.remove('d-none')
@@ -211,6 +222,7 @@ function restartGame() {
     }
 }
 
+// reset game function
 function resetGame(){
     scoreX = 0;
     scoreO = 0;
@@ -220,6 +232,7 @@ function resetGame(){
     restartGame()
 }
 
+// update score function
 function updateScore(winner) {
     if (winner === "X") {
         scoreX++;
@@ -230,43 +243,49 @@ function updateScore(winner) {
     }
 }
 
+// player timer function
 function startTurnTimer() {
     clearTimeout(turnTimeout);
     clearInterval(timerInterval);
 
+    // total time
     let timeLeft = 10;
     const timerText = document.querySelector("#timerText");
     timerText.textContent = `${timeLeft} second left`;
 
+    // set interval timer every 1 second
     timerInterval = setInterval(() => {
         timeLeft--;
         timerText.textContent = `${timeLeft} second left`;
 
         if (timeLeft <= 0) {
-        clearInterval(timerInterval);
-        Swal.fire({
-            title: `${currentPlayer} took too long!`,
-            text: "Turn skipped.",
-            icon: "warning",
-            timer: 1500,
-            showConfirmButton: false
-        });
-        changePlayer();
+        // clear interval
+            clearInterval(timerInterval);
+            Swal.fire({
+                title: `${currentPlayer} took too long!`,
+                text: "Turn skipped.",
+                icon: "warning",
+                timer: 1500,
+                showConfirmButton: false
+            });
+            changePlayer();
         }
     }, 1000);
 }
 
+// set history function
 function logMove(index) {
     turnCount++;
     historyLog.innerHTML += `Turn ${turnCount}: ${(currentPlayer == "X") ? 'O' : 'X' } → Cell ${index}<br>`;
 }
 
 // BOT
-
+// start bot function
 function botMove() {
   smartBotMove();
 }
 
+// bot movement logic
 function smartBotMove() {
     let move;
 
@@ -307,6 +326,7 @@ function smartBotMove() {
     }
 }
 
+// attack or defend logic
 function findBestMove(player) {
     for (let condition of winCondition) {
         const [a, b, c] = condition;
@@ -323,9 +343,11 @@ function findBestMove(player) {
     return null;
 }
 
+// execution bot function
 function executeBotMove(index) {
+    let theBotThink = Math.floor(Math.random() *(5000 - 500 +1) + 500)
     setTimeout(() => {
         updateCell(cells[index], index);
         checkWinner();
-    }, 500);
+    }, theBotThink);
 }

@@ -21,10 +21,12 @@
                 <h1 class="my-2">Shift Tic Tac Toe</h1>
             </div>
             <div class="col-md-6">
+                <!-- score -->
                 <div id="scoreboard" class="d-flex justify-content-evenly w-100">
                     <strong class="btn btn-danger rounded-3 px-4">X: <span id="scoreX">0</span></strong>
                     <strong class="btn btn-primary rounded-3 px-4">O: <span id="scoreO">0</span></strong>
                 </div>
+                <!-- game -->
                 <div id="mainGame">
                     <div id="cellContainer">
                         <div cellIndex="0" class="cell"></div>
@@ -38,9 +40,11 @@
                         <div cellIndex="8" class="cell"></div>
                     </div>
                 </div>
-                
+                <!-- status -->
                 <h2 class="m-1" id="statusText"></h2>
+                <!-- timer -->
                 <p class="m-1 fw-medium fs-6" id="timerText"></p>
+                <!-- game mode -->
                 <div class="mb-3" id="gameMode">
                     <label class="form-label fw-bold">Mode Permainan:</label><br>
                     <div class="form-check form-check-inline">
@@ -52,6 +56,7 @@
                         <label class="form-check-label" for="modeBot">1 vs Bot</label>
                     </div>
                 </div>
+                <!-- button -->
                 <div class="d-flex gap-2">
                     <button class="btn btn-primary rounded w-50" id="startBtn">Start Game</button>
                     <button class="btn btn-primary rounded w-50" id="resetBtn">Reset Game</button>
@@ -59,7 +64,7 @@
                 </div>
             </div>
 
-            <!-- RIGHT SIDE: Status & Controls -->
+            <!-- history -->
             <div class="col-md-6 d-flex flex-column align-items-center justify-content-start">
                 <h1>Move History</h1>
                 <div id="historyLog" class="w-100"></div>
