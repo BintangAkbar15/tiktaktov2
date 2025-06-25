@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Shift Tic Tac Toe</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+    <div id="gameContainer" class="container text-center py-sm-4">
+        <div class="row g-4">
+        <!-- LEFT SIDE: Game -->
+            <div class="col-12">
+                <h1 class="my-2">Shift Tic Tac Toe</h1>
+            </div>
+            <div class="col-md-6">
+                <div id="scoreboard" class="d-flex justify-content-evenly w-100">
+                    <strong class="btn btn-danger rounded-3 px-4">X: <span id="scoreX">0</span></strong>
+                    <strong class="btn btn-primary rounded-3 px-4">O: <span id="scoreO">0</span></strong>
+                </div>
+                <div id="mainGame">
+                    <div id="cellContainer">
+                        <div cellIndex="0" class="cell"></div>
+                        <div cellIndex="1" class="cell"></div>
+                        <div cellIndex="2" class="cell"></div>
+                        <div cellIndex="3" class="cell"></div>
+                        <div cellIndex="4" class="cell"></div>
+                        <div cellIndex="5" class="cell"></div>
+                        <div cellIndex="6" class="cell"></div>
+                        <div cellIndex="7" class="cell"></div>
+                        <div cellIndex="8" class="cell"></div>
+                    </div>
+                </div>
+                
+                <h2 class="m-1" id="statusText"></h2>
+                <p class="m-1 fw-medium fs-6" id="timerText"></p>
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Mode Permainan:</label><br>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="gameMode" id="modeHuman" value="human" checked>
+                        <label class="form-check-label" for="modeHuman">1 vs 1 </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="gameMode" id="modeBot" value="bot">
+                        <label class="form-check-label" for="modeBot">1 vs Bot</label>
+                    </div>
+                </div>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-primary rounded w-50" id="startBtn">Start Game</button>
+                    <button class="btn btn-primary rounded w-50" id="restartBtn">Restart</button>
+                </div>
+            </div>
+
+            <!-- RIGHT SIDE: Status & Controls -->
+            <div class="col-md-6 d-flex flex-column align-items-center justify-content-start">
+                <h1>Move History</h1>
+                <div id="historyLog" class="w-100"></div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
