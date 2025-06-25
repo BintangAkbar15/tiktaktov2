@@ -5,6 +5,7 @@ const scoreXText = document.querySelector("#scoreX");
 const scoreOText = document.querySelector("#scoreO");
 const historyLog = document.querySelector("#historyLog");
 const startBtn = document.querySelector("#startBtn");
+const resetBtn = document.querySelector("#resetBtn");
 const modeRadios = document.querySelectorAll('input[name="gameMode"]');
 const gameMode = document.querySelector('#gameMode')
 
@@ -35,7 +36,7 @@ modeRadios.forEach(radio => {
         scoreXText.textContent = "0";
         scoreOText.textContent = "0";
 
-        restartGame();
+        resetGame();
         clearInterval(timerInterval)
         clearTimeout(turnTimeout)
         statusText.textContent = ''
@@ -44,10 +45,13 @@ modeRadios.forEach(radio => {
 
 startBtn.addEventListener("click", initializeGame);
 restartBtn.addEventListener("click", restartGame);
+resetBtn.addEventListener("click", resetGame);
 
 function initializeGame() {
     gameMode.classList.add('d-none')
+    resetBtn.classList.add('d-none')
     startBtn.classList.add('d-none')
+    restartBtn.classList.remove('d-none')
     const selectedMode = document.querySelector('input[name="gameMode"]:checked')?.value || "human";
     vsBot = selectedMode === "bot";
 
@@ -139,7 +143,9 @@ function checkWinner() {
 
     if (roundWon) {
         gameMode.classList.remove('d-none')
+        resetBtn.classList.remove('d-none')
         startBtn.classList.remove('d-none')
+        restartBtn.classList.add('d-none')
         winningCombo.forEach(i => cells[i].classList.add("win"));
         updateScore(currentPlayer);
         Swal.fire({
@@ -158,7 +164,9 @@ function checkWinner() {
 
     if (!options.includes("")) {
         gameMode.classList.remove('d-none')
+        resetBtn.classList.remove('d-none')
         startBtn.classList.remove('d-none')
+        restartBtn.classList.add('d-none')
         Swal.fire({
             title: "Draw!",
             text: "Both players ran out of moves — it's a tie!",
@@ -177,7 +185,9 @@ function checkWinner() {
 
 function restartGame() {
     gameMode.classList.remove('d-none')
+    resetBtn.classList.remove('d-none')
     startBtn.classList.remove('d-none')
+    restartBtn.classList.add('d-none')
     options = ["", "", "", "", "", "", "", "", ""];
     xMoves = [];
     oMoves = [];
@@ -199,6 +209,15 @@ function restartGame() {
     if (currentPlayer === "O" && vsBot) {
         botMove();
     }
+}
+
+function resetGame(){
+    scoreX = 0;
+    scoreO = 0;
+    scoreXText.textContent = "0";
+    scoreOText.textContent = "0";
+
+    restartGame()
 }
 
 function updateScore(winner) {
