@@ -6,6 +6,7 @@ const scoreOText = document.querySelector("#scoreO");
 const historyLog = document.querySelector("#historyLog");
 const startBtn = document.querySelector("#startBtn");
 const modeRadios = document.querySelectorAll('input[name="gameMode"]');
+const gameMode = document.querySelector('#gameMode')
 
 let options = ["", "", "", "", "", "", "", "", ""];
 const winCondition = [
@@ -36,6 +37,8 @@ modeRadios.forEach(radio => {
 
         // Restart game biar mode dan skor bersih
         restartGame();
+        clearInterval(timerInterval)
+        clearTimeout(turnTimeout)
         statusText.textContent = ''
     });
 });
@@ -44,6 +47,8 @@ startBtn.addEventListener("click", initializeGame);
 restartBtn.addEventListener("click", restartGame);
 
 function initializeGame() {
+    gameMode.classList.add('d-none')
+    startBtn.classList.add('d-none')
     const selectedMode = document.querySelector('input[name="gameMode"]:checked')?.value || "human";
     vsBot = selectedMode === "bot";
 
@@ -65,8 +70,9 @@ function initializeGame() {
         cell.removeEventListener("click", cellClicked); // clear duplicate listeners
         cell.addEventListener("click", cellClicked);
     });
-
-    clearTimeout(turnTimeout);
+    
+    clearInterval(timerInterval)
+    clearTimeout(turnTimeout)
     startTurnTimer();
 
     if (currentPlayer === "O" && vsBot) {
@@ -86,7 +92,9 @@ function cellClicked() {
 function updateCell(cell, index) {
     options[index] = currentPlayer;
     cell.textContent = currentPlayer;
-    logMove(index);
+    setTimeout(() => {
+        logMove(index);
+    }, 100);
 
     let moves = currentPlayer === "X" ? xMoves : oMoves;
     moves.push(index);
@@ -95,6 +103,7 @@ function updateCell(cell, index) {
 
     if (moves.length > 3) {
         let oldIndex = moves.shift();
+        historyLog.innerHTML += `Cell ${oldIndex} has been removed by ${currentPlayer}<br>`;
         cells[oldIndex].classList.remove("text-muted");
         options[oldIndex] = "";
         cells[oldIndex].textContent = "";
@@ -130,6 +139,8 @@ function checkWinner() {
     clearTimeout(turnTimeout);
 
     if (roundWon) {
+        gameMode.classList.remove('d-none')
+        startBtn.classList.remove('d-none')
         winningCombo.forEach(i => cells[i].classList.add("win"));
         updateScore(currentPlayer);
         Swal.fire({
@@ -147,6 +158,8 @@ function checkWinner() {
     }
 
     if (!options.includes("")) {
+        gameMode.classList.remove('d-none')
+        startBtn.classList.remove('d-none')
         Swal.fire({
             title: "Draw!",
             text: "Both players ran out of moves — it's a tie!",
@@ -164,6 +177,8 @@ function checkWinner() {
 }
 
 function restartGame() {
+    gameMode.classList.remove('d-none')
+    startBtn.classList.remove('d-none')
     options = ["", "", "", "", "", "", "", "", ""];
     xMoves = [];
     oMoves = [];
@@ -178,7 +193,8 @@ function restartGame() {
         cell.classList.remove("text-muted", "win");
     });
 
-    clearTimeout(turnTimeout);
+    clearInterval(timerInterval)
+    clearTimeout(turnTimeout)
     // startTurnTimer();    
 
     if (currentPlayer === "O" && vsBot) {
@@ -224,7 +240,7 @@ function startTurnTimer() {
 
 function logMove(index) {
     turnCount++;
-    historyLog.innerHTML += `Turn ${turnCount}: ${currentPlayer} → Cell ${index}<br>`;
+    historyLog.innerHTML += `Turn ${turnCount}: ${(currentPlayer == "X") ? 'O' : 'X' } → Cell ${index}<br>`;
 }
 
 // BOT
