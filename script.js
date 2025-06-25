@@ -29,13 +29,12 @@ let timerInterval = null
 modeRadios.forEach(radio => {
     radio.addEventListener("change", () => {
         vsBot = document.querySelector('input[name="gameMode"]:checked')?.value === "bot";
-        // Reset skor
+
         scoreX = 0;
         scoreO = 0;
         scoreXText.textContent = "0";
         scoreOText.textContent = "0";
 
-        // Restart game biar mode dan skor bersih
         restartGame();
         clearInterval(timerInterval)
         clearTimeout(turnTimeout)
@@ -67,7 +66,7 @@ function initializeGame() {
         cell.textContent = "";
         cell.classList.remove("text-muted", "win");
         cell.setAttribute("cellIndex", index);
-        cell.removeEventListener("click", cellClicked); // clear duplicate listeners
+        cell.removeEventListener("click", cellClicked);
         cell.addEventListener("click", cellClicked);
     });
     
