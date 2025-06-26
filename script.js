@@ -314,6 +314,7 @@ function findBestMove(player, board) {
 
         if (countPlayer === 2 && countEmpty === 1) {
             const emptyIndex = [a, b, c].find(i => board[i] === "");
+            console.log([a, b, c])
             return emptyIndex;
         }
     }
