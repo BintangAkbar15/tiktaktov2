@@ -88,8 +88,7 @@ function initializeGame() {
 }
 
 // cell click function
-function cellClicked(e) {
-    console.log(e)
+function cellClicked() {
     const index = this.getAttribute("cellIndex");
 
     if (options[index] !== "" || !running || (vsBot && currentPlayer === "O")) return;
