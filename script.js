@@ -283,72 +283,53 @@ function logMove(index) {
 // BOT
 // start bot function
 function botMove() {
-  smartBotMove();
+    const simulatedBoard = getPredictedBoard();
+
+    let move = findBestMove("O", simulatedBoard) // nyerang
+        || findBestMove("X", simulatedBoard)     // ngebela X
+        || getRandomMove();
+
+    setTimeout(() => {
+        updateCell(cells[move], move);
+        checkWinner();
+    }, Math.floor(Math.random() * (1000 - 300 + 1)) + 300);
 }
 
-// bot movement logic
-function smartBotMove() {
-    let move;
-
-    // 1. Coba cari langkah untuk menang
-    move = findBestMove("O");
-    if (move !== null) {
-        executeBotMove(move);
-        return;
-    }
-
-    // 2. Coba blok lawan (X) biar gak menang
-    move = findBestMove("X");
-    if (move !== null) {
-        executeBotMove(move);
-        return;
-    }
-
-    // 3. Ambil tengah kalau kosong
-    if (options[4] === "") {
-        executeBotMove(4);
-        return;
-    }
-
-    // 4. Ambil pojok kalau ada
-    const corners = [0, 2, 6, 8];
-    move = corners.find(i => options[i] === "");
-    if (move !== undefined) {
-        executeBotMove(move);
-        return;
-    }
-
-    // 5. Ambil sisi samping kalau terpaksa
-    const sides = [1, 3, 5, 7];
-    move = sides.find(i => options[i] === "");
-    if (move !== undefined) {
-        executeBotMove(move);
-        return;
-    }
+function getRandomMove() {
+  const available = options
+    .map((val, idx) => val === "" ? idx : null)
+    .filter(v => v !== null);
+    
+  return available[Math.floor(Math.random() * available.length)];
 }
 
 // attack or defend logic
-function findBestMove(player) {
+function findBestMove(player, board) {
     for (let condition of winCondition) {
         const [a, b, c] = condition;
-        const values = [options[a], options[b], options[c]];
+        const values = [board[a], board[b], board[c]];
 
         const countPlayer = values.filter(v => v === player).length;
         const countEmpty = values.filter(v => v === "").length;
 
         if (countPlayer === 2 && countEmpty === 1) {
-        const emptyIndex = [a, b, c].find(i => options[i] === "");
-        return emptyIndex;
+            const emptyIndex = [a, b, c].find(i => board[i] === "");
+            return emptyIndex;
         }
     }
     return null;
 }
 
-// execution bot function
-function executeBotMove(index) {
-    let theBotThink = Math.floor(Math.random() *(5000 - 500 +1) + 500)
-    setTimeout(() => {
-        updateCell(cells[index], index);
-        checkWinner();
-    }, theBotThink);
+
+function getPredictedBoard() {
+    const simulated = [...options]; // clone
+    if (xMoves.length > 3) {
+        const xOut = xMoves[0];
+        simulated[xOut] = "";
+    }
+    if (oMoves.length > 3) {
+        const oOut = oMoves[0];
+        simulated[oOut] = "";
+    }
+    return simulated;
 }
