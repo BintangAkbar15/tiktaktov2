@@ -123,15 +123,17 @@ function updateCell(cell, index) {
 
 // change player function
 function changePlayer() {
-    currentPlayer = currentPlayer === "X" ? "O" : "X";
-    statusText.textContent = `${currentPlayer}'s Turn`;
-    statusText.style.color = currentPlayer === "X" ? "red" : "blue";
-    clearTimeout(turnTimeout);
-    startTurnTimer();
-
-    if (currentPlayer === "O" && vsBot && running) {
-        botMove();
-    }
+    setTimeout(() => {
+        currentPlayer = currentPlayer === "X" ? "O" : "X";
+        statusText.textContent = `${currentPlayer}'s Turn`;
+        statusText.style.color = currentPlayer === "X" ? "red" : "blue";
+        clearTimeout(turnTimeout);
+        startTurnTimer();
+    
+        if (currentPlayer === "O" && vsBot && running) {
+            botMove();
+        }
+    }, 200);
 }
 
 // check winner condition
@@ -276,7 +278,7 @@ function startTurnTimer() {
 // set history function
 function logMove(index) {
     turnCount++;
-    historyLog.innerHTML += `Turn ${turnCount}: ${(currentPlayer == "X") ? 'O' : 'X' } → Cell ${index}<br>`;
+    historyLog.innerHTML += `Turn ${turnCount}: ${currentPlayer} → Cell ${Number(index) +1}<br>`;
 }
 
 // BOT
